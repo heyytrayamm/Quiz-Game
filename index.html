@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modi Quiz Game</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Enhanced Large Bold Wordart for AYEGA TO MODI JI HII !! */
+        .wordart-title {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(180deg, #FF9933 0%, #FF5722 40%, #FFFFFF 50%, #138808 60%, #0d5c05 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(4px 4px 3px rgba(0,0,0,0.85)) drop-shadow(0 0 20px rgba(255, 153, 51, 0.8));
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-orange-50 via-amber-50 to-emerald-50 min-h-screen flex items-center justify-center p-4">
+
+<div class="w-full max-w-xl bg-white shadow-2xl rounded-2xl overflow-hidden border border-orange-200">
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="p-8 text-center flex flex-col items-center justify-center space-y-6">
+        <div class="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center text-white text-3xl shadow-lg">
+            🇮🇳
+        </div>
+        <div class="space-y-2">
+            <h1 class="text-3xl font-black text-gray-800 tracking-wide uppercase">WELCOME TO THE QUIZ GAME</h1>
+            <p class="text-gray-500 text-sm">Test your knowledge with 5 engaging questions!</p>
+        </div>
+        <button id="start-btn" class="w-full py-4 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold text-lg rounded-xl shadow-lg transition transform active:scale-95 cursor-pointer">
+            Start Quiz
+        </button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden p-8 space-y-6">
+        <!-- Header Progress -->
+        <div class="flex justify-between items-center border-b pb-4">
+            <span id="question-counter" class="text-sm font-semibold text-orange-600 bg-orange-50 px-3 py-1 rounded-full">Question 1 of 5</span>
+            <span id="current-score" class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Score: 0</span>
+        </div>
+
+        <!-- Question Box -->
+        <div class="space-y-2">
+            <h2 id="question-text" class="text-xl font-bold text-gray-800 leading-snug">Loading question...</h2>
+        </div>
+
+        <!-- Options Container -->
+        <div id="options-container" class="space-y-3">
+            <!-- Dynamically injected option buttons -->
+        </div>
+
+        <!-- Feedback Message Box -->
+        <div id="feedback-box" class="hidden p-4 rounded-xl text-center font-bold text-lg shadow-sm">
+            <!-- Feedback text -->
+        </div>
+    </div>
+
+    <!-- End Screen -->
+    <div id="end-screen" class="hidden p-8 text-center space-y-6">
+        <div class="space-y-2">
+            <h2 class="text-2xl font-black text-gray-800 tracking-wider">END OF THE QUIZ</h2>
+            <div class="text-xl font-semibold text-orange-600 bg-orange-50 py-3 px-4 rounded-xl shadow-inner inline-block">
+                You have Scored <span id="final-score">0</span> out of <span id="total-questions">5</span>
+            </div>
+        </div>
+
+        <!-- Narendra Modi Ji Picture placed in the orange box as requested -->
+        <div class="flex flex-col items-center space-y-4 pt-1">
+            <div class="w-56 h-56 sm:w-64 sm:h-64 rounded-2xl overflow-hidden shadow-2xl border-4 border-orange-500 bg-orange-100 flex items-center justify-center relative">
+                <img src="https://images.hindustantimes.com/img/2024/06/09/1600x900/PM_Modi_1717949363842_1717949364079.jpg"
+                     alt="Narendra Modi Ji"
+                     class="w-full h-full object-cover">
+            </div>
+
+            <!-- Large & Clear Wordart Requirement -->
+            <div class="w-full py-2">
+                <h3 class="wordart-title text-3xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase transform hover:scale-105 transition duration-300">
+                    AYEGA TO MODI JI HII !!
+                </h3>
+            </div>
+        </div>
+
+        <button id="restart-btn" class="w-full py-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold rounded-xl shadow-lg transition transform active:scale-95 cursor-pointer">
+            Restart Quiz
+        </button>
+    </div>
+
+</div>
+
+<script>
+    // Quiz data mapped directly from Java backend
+    const questions = [
+        "Who is the Greatest World leader ?",
+        "Who is the Pioneer of new Bharat?",
+        "Which is the Largest  Party of World?",
+        "Who is the Next PM ?" ,
+        "Which is the Most Deadliest duo right now ?"
+    ];
+
+    const options = [
+        ["1. Donald Trump", "2. Rahul Gandhi", "3. Xi jinping", "4. Narendra Modi"],
+        ["1. Mahatma Gandhi", "2. Jawaharlal Neheru", "3. Narendra Modi", "4. Rahul Gandhi", "5.Indira Gandhi"],
+        ["1. TMC", "2. CONGRESS", "3. AAP", "4. BJP", "5. CPIM"],
+        ["1. Rahul Gandhi", "2. Akhilesh Yadav", "3. Arvind Kejriwal", "4. Narendra Modi", "5.Mamata Banerjee"],
+        ["1. Modiji-Putinji", "2. Rahulji-Akhileshji", "3. Trumpji-pakistanibhikhari", "4. Kejriwalji-Mamtadidi"]
+    ];
+
+    const answers = [4, 3, 4, 4, 1];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let lockOptions = false;
+
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const endScreen = document.getElementById('end-screen');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const questionCounter = document.getElementById('question-counter');
+    const currentScoreEl = document.getElementById('current-score');
+    const feedbackBox = document.getElementById('feedback-box');
+    const finalScoreEl = document.getElementById('final-score');
+    const totalQuestionsEl = document.getElementById('total-questions');
+    const startBtn = document.getElementById('start-btn');
+    const restartBtn = document.getElementById('restart-btn');
+
+    function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        welcomeScreen.classList.add('hidden');
+        quizScreen.classList.remove('hidden');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        lockOptions = false;
+        feedbackBox.classList.add('hidden');
+
+        const qNum = currentQuestionIndex + 1;
+        questionCounter.innerText = `Question ${qNum} of ${questions.length}`;
+        currentScoreEl.innerText = `Score: ${score}`;
+        questionText.innerText = questions[currentQuestionIndex];
+
+        optionsContainer.innerHTML = '';
+        options[currentQuestionIndex].forEach((optionText, index) => {
+            const choiceNum = index + 1;
+            const btn = document.createElement('button');
+            btn.className = "w-full text-left p-4 rounded-xl border-2 border-orange-100 bg-orange-50/50 hover:bg-orange-100/80 hover:border-orange-300 font-semibold text-gray-700 transition duration-200 shadow-sm cursor-pointer flex items-center justify-between";
+            btn.innerHTML = `<span>${optionText}</span> <span class="text-xs text-orange-400 font-bold">Select</span>`;
+            btn.onclick = () => selectOption(choiceNum, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(guess, selectedBtn) {
+        if (lockOptions) return;
+        lockOptions = true;
+
+        const correctAnswer = answers[currentQuestionIndex];
+
+        const allButtons = optionsContainer.getElementsByTagName('button');
+        for (let btn of allButtons) {
+            btn.disabled = true;
+            btn.classList.add('opacity-70');
+        }
+
+        feedbackBox.classList.remove('hidden');
+
+        if (guess === correctAnswer) {
+            selectedBtn.classList.remove('border-orange-100', 'bg-orange-50/50');
+            selectedBtn.classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-900', 'opacity-100');
+            feedbackBox.className = "p-4 rounded-xl text-center font-bold text-lg shadow-sm bg-emerald-100 text-emerald-800 border border-emerald-300";
+            feedbackBox.innerText = "******************************\nCongo !! You Guessed right \n******************************";
+            score++;
+        } else {
+            selectedBtn.classList.remove('border-orange-100', 'bg-orange-50/50');
+            selectedBtn.classList.add('border-rose-500', 'bg-rose-100', 'text-rose-900', 'opacity-100');
+            feedbackBox.className = "p-4 rounded-xl text-center font-bold text-lg shadow-sm bg-rose-100 text-rose-800 border border-rose-300";
+            feedbackBox.innerText = "******************************\nWrong guess !!\n******************************";
+
+            const correctBtn = allButtons[correctAnswer - 1];
+            if (correctBtn) {
+                correctBtn.classList.remove('border-orange-100', 'bg-orange-50/50', 'opacity-70');
+                correctBtn.classList.add('border-emerald-500', 'bg-emerald-100', 'text-emerald-900', 'opacity-100');
+            }
+        }
+
+        currentScoreEl.innerText = `Score: ${score}`;
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                showEndScreen();
+            }
+        }, 2000);
+    }
+
+    function showEndScreen() {
+        quizScreen.classList.add('hidden');
+        endScreen.classList.remove('hidden');
+        finalScoreEl.innerText = score;
+        totalQuestionsEl.innerText = questions.length;
+    }
+
+    function restartQuiz() {
+        endScreen.classList.add('hidden');
+        welcomeScreen.classList.remove('hidden');
+    }
+
+    // Attach event listeners safely
+    if (startBtn) startBtn.addEventListener('click', startQuiz);
+    if (restartBtn) restartBtn.addEventListener('click', restartQuiz);
+</script>
+</body>
+
